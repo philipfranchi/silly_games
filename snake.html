@@ -5,14 +5,15 @@
 </head>
 <body>
 
-<canvas id="myCanvas" width="200" height="200" style="border:1px solid #d3d3d3;">
+<canvas id="myCanvas" width="300" height="300" style="border:1px solid #d3d3d3;">
 Your browser does not support the HTML5 canvas tag.</canvas>
 
 
 <script>
-	function mod (x, n) { return (x % n + n) % n }
+	function wrap(x, n) { return (x % n + n) % n }
 	RED = "#FF0000";
 	GREEN = "#00FF00";
+	BLACK = "#000000"
 
 	BOARD_WIDTH = 20;
 	BOARD_HEIGHT = 20;
@@ -32,8 +33,8 @@ Your browser does not support the HTML5 canvas tag.</canvas>
 	lastButton = 0;
 
 	function update() {
-		playerX = mod((playerX + velocityX), BOARD_WIDTH);
-		playerY = mod((playerY + velocityY), BOARD_HEIGHT);
+		playerX = wrap((playerX + velocityX), BOARD_WIDTH);
+		playerY = wrap((playerY + velocityY), BOARD_HEIGHT);
 
 		for(i = 0; i < tail.length; i++) {
 			if( lastButton != 0 && playerX == tail[i][0] && playerY == tail[i][1]) {
@@ -58,13 +59,27 @@ Your browser does not support the HTML5 canvas tag.</canvas>
 		for(i = 0; i < tail.length; i++) {
 			nodeX = tail[i][0];
 			nodeY = tail[i][1];
-			ctx.rect(nodeX * canvas.width, nodeY * canvas.height, canvas.width, canvas.height);
+			
+			ctx.rect(
+				nodeX * (canvas.width / BOARD_WIDTH),
+				nodeY * (canvas.height / BOARD_HEIGHT), 
+				(canvas.width / BOARD_WIDTH),
+				(canvas.height / BOARD_HEIGHT));
 		}
+
 		ctx.fillStyle = RED;
+		ctx.lineWidth = 5;
+		ctx.strokeStyle = BLACK;
 		ctx.fill();
+		ctx.stroke();
 
 		ctx.beginPath();
-		ctx.rect(foodX * canvas.width, foodY * canvas.height, canvas.width, canvas.height)
+
+		ctx.rect(
+			foodX * (canvas.width / BOARD_WIDTH),
+			foodY * (canvas.height / BOARD_HEIGHT), 
+			(canvas.width / BOARD_WIDTH),
+			(canvas.height / BOARD_HEIGHT));
 		ctx.fillStyle = GREEN;
 		ctx.fill();
 
